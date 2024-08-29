@@ -1,25 +1,21 @@
 import discord
+from discord.ext import commands
 
 intents = discord.Intents.default()
 intents.message_content = True
 
-client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix='!', intents=intents)
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f'{client.user} olarak giriş yaptık')
+    print(f'{bot.user} olarak giriş yaptık')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.content.startswith('$hello'):
-        await message.channel.send(f'Merhaba {client.user}! ben bir botum!')
-    elif  message.content.startswith('$heh'):
-        if len(message.content) > 4:
-            count_heh = int(message.content[4:])
-        else:
-            count_heh = 5
-        await message.channel.send("he" * count_heh)
-        
-client.run("GİZLİ TOKEN BURAYA")
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Merhaba! Ben {bot.user}, bir Discord sohbet botuyum!')
+
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he" * count_heh)
+
+bot.run("GİZLİ TOKEN BURAYA")
